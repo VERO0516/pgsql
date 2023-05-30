@@ -1,0 +1,4 @@
+CREATE SCHEMA user;
+CREATE SCHEMA gallery;
+CREATE SCHEMA forum;
+CREATE SCHEMA shop;

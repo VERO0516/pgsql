@@ -1,0 +1,72 @@
+-- Table Users
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY NOT NULL CHECK (id > 0),
+    username VARCHAR(255) NOT NULL,
+    password password_type NOT NULL,
+    email email_type NOT NULL UNIQUE,
+    code_postal INTEGER CHECK (code_postal > 0),
+    address VARCHAR(255)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table product
+
+CREATE TABLE IF NOT EXISTS shop.products (
+    id BIGSERIAL PRIMARY KEY NOT NULL CHECK (id > 0),
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    price MONEY NOT NULL,
+    stock INTEGER NOT NULL CHECK (stock >= 0),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table carts
+
+    CREATE TABLE IF NOT EXISTS shop.carts (
+        id BIGSERIAL PRIMARY KEY NOT NULL CHECK (id > 0),
+        user_id BIGINT NOT NULL REFERENCES public.users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+        state BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+-- Table cart_items
+
+CREATE TABLE IF NOT EXISTS shop.cart_items    (
+    id BIGSERIAL PRIMARY KEY NOT NULL CHECK (id > 0),
+    cart_id BIGINT NOT NULL REFERENCES carts (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    product_id BIGINT NOT NULL REFERENCES products (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    quantity INTEGER NOT NULL CHECK (quantity > 0),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table topics
+
+CREATE TABLE IF NOT EXISTS forum.topics (
+    id BIGSERIAL PRIMARY KEY NOT NULL CHECK (id > 0),
+    title VARCHAR(100) NOT NULL,
+    contenu TEXT NOT NULL,
+    user_id BIGINT NOT NULL REFERENCES public.users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    state BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table posts
+
+CREATE TABLE IF NOT EXISTS forum.posts (
+    id BIGSERIAL PRIMARY KEY NOT NULL CHECK (id > 0),
+    contenu TEXT NOT NULL,
+    user_id BIGINT NOT NULL REFERENCES public.users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    topic_id BIGINT NOT NULL REFERENCES topics (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table image
+
+CREATE TABLE IF NOT EXISTS gallery.image (
+    id BIGSERIAL PRIMARY KEY NOT NULL CHECK (id > 0),
+    title VARCHAR(100) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    description TEXT,
+    user_id BIGINT NOT NULL REFERENCES public.users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
