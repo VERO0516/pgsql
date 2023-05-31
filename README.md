@@ -1,15 +1,15 @@
 ## Structure de la base de données
-SCHEMA Public;
+**SCHEMA Public**
     - Table "users" : Stocke les informations des utilisateurs, y compris leur nom d'utilisateur, leur mot de passe, leur adresse e-mail et leur adresse postale.
 
-SCHEMA gallery;
+S**CHEMA gallery**
 - Table "image" : Stocke les informations sur les images de la galerie, y compris le titre, l'URL, la description, l'ID de l'utilisateur et la date de création.
 
-SCHEMA forum;
+**SCHEMA forum**
 - Table "topics" : Stocke les informations sur les sujets du forum, y compris le titre, le contenu, l'ID de l'utilisateur, l'état et la date de création.
 - Table "posts" : Stocke les informations sur les messages du forum, y compris le contenu, l'ID de l'utilisateur, l'ID du sujet et la date de création.
 
-SCHEMA shop;
+S**CHEMA shop**
     - Table "carts" : Stocke les informations sur les paniers d'achat des utilisateurs, y compris l'ID de l'utilisateur, l'état du panier et la date de création.
     - Table "cart_items" : Stocke les informations sur les articles du panier, y compris l'ID du panier, l'ID du produit, la quantité et la date de création.
     - Table "products" : Stocke les informations sur les produits, y compris leur nom, leur description, leur prix et leur stock.
