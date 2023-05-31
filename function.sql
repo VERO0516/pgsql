@@ -1,5 +1,3 @@
-
-
 CREATE OR REPLACE FUNCTION calculate_cart_total(p_cart_id BIGINT)
 RETURNS NUMERIC
 AS $$

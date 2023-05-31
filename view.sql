@@ -5,10 +5,6 @@ AS
     JOIN shop.cart_items ci ON c.id = ci.cart_id
     JOIN shop.products p ON ci.product_id = p.id;
 
-SELECT product_name, quantity, price
-FROM cart_items_view
-WHERE cart_id = 1;
-
 
 CREATE VIEW forum_view
 AS
@@ -17,6 +13,3 @@ AS
     JOIN forum.posts p ON t.id = p.topic_id
     JOIN public.users u ON p.user_id = u.id;
 
-SELECT title, topic_contenu, posts_contenu,username
-FROM forum_view
-WHERE topic_id = 1;

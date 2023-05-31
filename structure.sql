@@ -1,5 +1,4 @@
 --SCHEMA-----------------------------------------------------------------
-CREATE SCHEMA user;
 CREATE SCHEMA gallery;
 CREATE SCHEMA forum;
 CREATE SCHEMA shop;
@@ -134,6 +133,24 @@ CREATE TRIGGER incr_created_topics
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_insert_topics();
 
+--FUNCTION-----------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION calculate_cart_total(p_cart_id BIGINT)
+RETURNS NUMERIC
+AS $$
+DECLARE
+    total_price NUMERIC := 0;
+BEGIN
+    SELECT SUM(quantity * price)
+    INTO total_price
+    FROM cart_items
+    JOIN products ON cart_items.product_id = products.id
+    WHERE cart_items.cart_id = p_cart_id;
+    
+    RETURN total_price;
+END;
+$$ LANGUAGE plpgsql;
+
 
 --VIEW-----------------------------------------------------------------
 CREATE VIEW cart_items_view
@@ -159,20 +176,3 @@ SELECT title, topic_contenu, posts_contenu,username
 FROM forum_view
 WHERE topic_id = 1;
 
---FUNCTION-----------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION calculate_cart_total(p_cart_id BIGINT)
-RETURNS NUMERIC
-AS $$
-DECLARE
-    total_price NUMERIC := 0;
-BEGIN
-    SELECT SUM(quantity * price)
-    INTO total_price
-    FROM cart_items
-    JOIN products ON cart_items.product_id = products.id
-    WHERE cart_items.cart_id = p_cart_id;
-    
-    RETURN total_price;
-END;
-$$ LANGUAGE plpgsql;
