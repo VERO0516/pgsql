@@ -89,6 +89,50 @@ CREATE TABLE IF NOT EXISTS gallery.image (
 
 --TRIGGER-----------------------------------------------------------------
 
+CREATE TABLE count_created_users (
+    count_created_users BIGINT
+);
+
+INSERT INTO stats(count_created_users) VALUES(0);
+
+CREATE OR REPLACE FUNCTION trigger_insert_user()
+RETURNS TRIGGER
+AS $$
+    BEGIN
+
+        UPDATE stats SET count_created_users = count_created_users + 1;
+
+        RETURN NEW;
+    END;
+$$ LANGUAGE PLPGSQL;
+
+CREATE TRIGGER incr_created_users
+    AFTER INSERT ON users
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_insert_user();
+
+
+CREATE TABLE count_created_topics (
+    count_created_topics BIGINT
+);
+
+INSERT INTO stats(count_created_topics) VALUES(0);
+
+CREATE OR REPLACE FUNCTION trigger_insert_topics()
+RETURNS TRIGGER
+AS $$
+    BEGIN
+
+        UPDATE stats SET count_created_topics = count_created_topics + 1;
+
+        RETURN NEW;
+    END;
+$$ LANGUAGE PLPGSQL;
+
+CREATE TRIGGER incr_created_topics
+    AFTER INSERT ON topics
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_insert_topics();
 
 
 --VIEW-----------------------------------------------------------------
@@ -115,5 +159,20 @@ SELECT title, topic_contenu, posts_contenu,username
 FROM forum_view
 WHERE topic_id = 1;
 
+--FUNCTION-----------------------------------------------------------------
 
-
+CREATE OR REPLACE FUNCTION calculate_cart_total(p_cart_id BIGINT)
+RETURNS NUMERIC
+AS $$
+DECLARE
+    total_price NUMERIC := 0;
+BEGIN
+    SELECT SUM(quantity * price)
+    INTO total_price
+    FROM cart_items
+    JOIN products ON cart_items.product_id = products.id
+    WHERE cart_items.cart_id = p_cart_id;
+    
+    RETURN total_price;
+END;
+$$ LANGUAGE plpgsql;
